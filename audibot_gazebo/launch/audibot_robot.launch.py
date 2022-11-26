@@ -19,6 +19,7 @@ def generate_launch_description():
         DeclareLaunchArgument('pub_tf', default_value='false', description='Whether to broadcast TF frames'),
         DeclareLaunchArgument('blue', default_value='false', description='Car is blue if true, orange if false'),
         DeclareLaunchArgument('robot_name', default_value='', description='Name and prefix for this robot'),
+        DeclareLaunchArgument('robot_model', default_value=urdf_file, description='Model used as car'),
         Node(
             package='robot_state_publisher',
             executable='robot_state_publisher',
@@ -28,7 +29,7 @@ def generate_launch_description():
                 'use_sim_time': True,
                 'frame_prefix': [LaunchConfiguration('robot_name'), '/'],
                 'publish_frequency': LaunchConfiguration('tf_freq'),
-                'robot_description': Command([f'xacro {urdf_file} pub_tf:=', LaunchConfiguration('pub_tf'), ' blue:=', LaunchConfiguration('blue'), ' robot_name:=', LaunchConfiguration('robot_name')])
+                'robot_description': Command(['xacro ', LaunchConfiguration('robot_model'), ' pub_tf:=', LaunchConfiguration('pub_tf'), ' blue:=', LaunchConfiguration('blue'), ' robot_name:=', LaunchConfiguration('robot_name')])
             }]),
         Node(
             package='gazebo_ros',
